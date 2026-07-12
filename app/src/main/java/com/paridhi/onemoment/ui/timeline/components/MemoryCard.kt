@@ -38,14 +38,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.paridhi.onemoment.data.Memory
+import coil.compose.AsyncImage
+import com.paridhi.onemoment.data.local.MemoryEntity
 
 @Composable
 fun MemoryCard(
-    memory: Memory,
+    memory: MemoryEntity,
     modifier: Modifier = Modifier
 ) {
     var isExpanded by remember { mutableStateOf(false) }
@@ -64,24 +66,18 @@ fun MemoryCard(
         Column(
             modifier = Modifier.padding(16.dp)
         ) {
-            // Image Placeholder
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .clip(RoundedCornerShape(24.dp))
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Image,
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp),
-                    tint = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.3f)
+            if (memory.photoUri != null) {
+                AsyncImage(
+                    model = memory.photoUri,
+                    contentDescription = "Memory Photo",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp)
+                        .clip(RoundedCornerShape(24.dp))
                 )
+                Spacer(modifier = Modifier.height(16.dp))
             }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             // Date Chip
             Surface(
@@ -89,7 +85,7 @@ fun MemoryCard(
                 shape = CircleShape
             ) {
                 Text(
-                    text = "${memory.day} • ${memory.date}",
+                    text = memory.createdDate,
                     modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSecondaryContainer,
@@ -99,30 +95,13 @@ fun MemoryCard(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            // Title
+            // Memory Text
             Text(
-                text = memory.title,
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                text = memory.memoryText,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                lineHeight = 24.sp
             )
-
-            // Description (Expanded)
-            AnimatedVisibility(
-                visible = isExpanded,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
-            ) {
-                Column {
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = memory.description,
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        lineHeight = 24.sp
-                    )
-                }
-            }
         }
     }
 }

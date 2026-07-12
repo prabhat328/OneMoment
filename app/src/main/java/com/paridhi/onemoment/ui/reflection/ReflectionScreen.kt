@@ -18,29 +18,61 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.paridhi.onemoment.data.DummyMemoryRepository
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.paridhi.onemoment.ui.reflection.components.ReflectionMemoryCard
 import com.paridhi.onemoment.ui.reflection.components.ReflectionQuoteCard
 import com.paridhi.onemoment.ui.reflection.components.ReflectionTextCard
 
 @Composable
-fun ReflectionScreen() {
+fun ReflectionScreen(
+    viewModel: ReflectionViewModel = hiltViewModel()
+) {
     val scrollState = rememberScrollState()
-    val randomMemory = remember { DummyMemoryRepository.getMemories().random() }
+    val randomMemory by viewModel.randomMemory.collectAsStateWithLifecycle()
     var visible by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        visible = true
+    LaunchedEffect(randomMemory) {
+        if (randomMemory != null) {
+            visible = true
+        }
     }
 
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(animationSpec = tween(1000))
-    ) {
+    if (randomMemory == null) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Nothing to reflect on yet",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Save a few memories and come back tomorrow.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(100.dp))
+        }
+    } else {
+        AnimatedVisibility(
+            visible = visible,
+            enter = fadeIn(animationSpec = tween(1000))
+        ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -78,12 +110,12 @@ fun ReflectionScreen() {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            ReflectionMemoryCard(memory = randomMemory)
+            ReflectionMemoryCard(memory = randomMemory!!)
 
             Spacer(modifier = Modifier.height(16.dp))
 
             ReflectionTextCard(
-                text = randomMemory.description
+                text = randomMemory!!.memoryText
             )
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -91,6 +123,7 @@ fun ReflectionScreen() {
             ReflectionQuoteCard(
                 quote = "The little moments? The little moments are not little."
             )
+        }
         }
     }
 }

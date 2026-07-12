@@ -20,11 +20,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.paridhi.onemoment.data.Memory
+import com.paridhi.onemoment.data.local.MemoryEntity
 
 @Composable
 fun ReflectionMemoryCard(
-    memory: Memory,
+    memory: MemoryEntity,
     modifier: Modifier = Modifier
 ) {
     Card(
