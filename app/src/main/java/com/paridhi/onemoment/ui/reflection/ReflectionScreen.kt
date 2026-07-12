@@ -37,6 +37,8 @@ fun ReflectionScreen(
 ) {
     val scrollState = rememberScrollState()
     val randomMemory by viewModel.randomMemory.collectAsStateWithLifecycle()
+    val title by viewModel.title.collectAsStateWithLifecycle()
+    val quote by viewModel.quote.collectAsStateWithLifecycle()
     var visible by remember { mutableStateOf(false) }
 
     LaunchedEffect(randomMemory) {
@@ -91,7 +93,7 @@ fun ReflectionScreen(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "A memory came back\ntoday.",
+                text = title,
                 style = MaterialTheme.typography.displayMedium,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
@@ -101,8 +103,22 @@ fun ReflectionScreen(
 
             Spacer(modifier = Modifier.height(8.dp))
 
+            val memory = randomMemory!!
+
+            // Format: "From July 9, 2026 • Wednesday" based on memory's createdDate
+            // Extract the day and date assuming format is "EEEE, MMMM d"
+            val parts = memory.createdDate.split(",")
+            val dayName = parts.getOrNull(0)?.trim() ?: ""
+            val monthDate = parts.getOrNull(1)?.trim() ?: memory.createdDate
+
+            val formattedDate = if (dayName.isNotEmpty()) {
+                "From $monthDate • $dayName"
+            } else {
+                "From ${memory.createdDate}"
+            }
+
             Text(
-                text = "From July 9, 2026 • Wednesday",
+                text = formattedDate,
                 style = MaterialTheme.typography.labelLarge,
                 color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
                 modifier = Modifier.padding(horizontal = 24.dp)
@@ -110,18 +126,21 @@ fun ReflectionScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            ReflectionMemoryCard(memory = randomMemory!!)
+            if (memory.photoUri != null) {
+                ReflectionMemoryCard(memory = memory)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
             ReflectionTextCard(
-                text = randomMemory!!.memoryText
+                text = memory.memoryText
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             ReflectionQuoteCard(
-                quote = "The little moments? The little moments are not little."
+                quote = quote
             )
         }
         }

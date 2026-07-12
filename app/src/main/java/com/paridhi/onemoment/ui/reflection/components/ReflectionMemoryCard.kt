@@ -19,7 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.paridhi.onemoment.data.local.MemoryEntity
 
 @Composable
@@ -37,20 +39,32 @@ fun ReflectionMemoryCard(
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(240.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f)),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.Image,
-                contentDescription = null,
-                modifier = Modifier.size(64.dp),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+        if (memory.photoUri != null) {
+            AsyncImage(
+                model = memory.photoUri,
+                contentDescription = "Reflection Photo",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(240.dp)
+                    .clip(RoundedCornerShape(24.dp))
             )
+        } else {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(240.dp)
+                    .clip(RoundedCornerShape(24.dp))
+                    .background(MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.3f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Image,
+                    contentDescription = null,
+                    modifier = Modifier.size(64.dp),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.3f)
+                )
+            }
         }
     }
 }
