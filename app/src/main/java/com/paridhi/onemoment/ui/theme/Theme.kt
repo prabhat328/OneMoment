@@ -8,9 +8,13 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
+
+val LocalThemeToggle = compositionLocalOf { { _: Boolean -> } }
+val LocalIsDarkMode = compositionLocalOf { false }
 
 private val LightColorScheme = lightColorScheme(
     primary = SageGreen,

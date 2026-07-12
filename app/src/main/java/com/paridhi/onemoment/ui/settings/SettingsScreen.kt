@@ -23,20 +23,19 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.paridhi.onemoment.ui.theme.LocalIsDarkMode
+import com.paridhi.onemoment.ui.theme.LocalThemeToggle
 
 @Composable
 fun SettingsScreen() {
     val scrollState = rememberScrollState()
-    var darkModeEnabled by remember { mutableStateOf(false) }
+    val isDarkMode = LocalIsDarkMode.current
+    val toggleTheme = LocalThemeToggle.current
 
     Column(
         modifier = Modifier
@@ -59,8 +58,8 @@ fun SettingsScreen() {
                 icon = Icons.Default.Palette,
                 title = "Dark Theme",
                 subtitle = "Reduce glare and improve sleep",
-                checked = darkModeEnabled,
-                onCheckedChange = { darkModeEnabled = it }
+                checked = isDarkMode,
+                onCheckedChange = { toggleTheme(it) }
             )
         }
 
