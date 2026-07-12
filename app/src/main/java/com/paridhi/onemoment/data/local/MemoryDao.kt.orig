@@ -11,9 +11,6 @@ interface MemoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertMemory(memory: MemoryEntity): Long
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertMemories(memories: List<MemoryEntity>)
-
     @Query("SELECT * FROM memories ORDER BY createdTimestamp DESC")
     fun getAllMemories(): Flow<List<MemoryEntity>>
 
@@ -22,10 +19,4 @@ interface MemoryDao {
 
     @Query("DELETE FROM memories WHERE id = :id")
     suspend fun deleteMemory(id: Long)
-
-    @Query("DELETE FROM memories")
-    suspend fun deleteAllMemories()
-
-    @Query("SELECT COUNT(*) FROM memories")
-    suspend fun getMemoriesCount(): Int
 }

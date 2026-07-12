@@ -27,10 +27,6 @@ class RoomMemoryRepository @Inject constructor(
         memoryDao.insertMemory(memory)
     }
 
-    override suspend fun saveMemories(memories: List<MemoryEntity>) {
-        memoryDao.insertMemories(memories)
-    }
-
     override fun getAllMemories(): Flow<List<MemoryEntity>> {
         return memoryDao.getAllMemories()
     }
@@ -41,10 +37,6 @@ class RoomMemoryRepository @Inject constructor(
 
     override suspend fun deleteMemory(id: Long) {
         memoryDao.deleteMemory(id)
-    }
-
-    override suspend fun deleteAllMemories() {
-        memoryDao.deleteAllMemories()
     }
 
     override suspend fun getRandomReflectionMemory(): MemoryEntity? {
@@ -62,9 +54,5 @@ class RoomMemoryRepository @Inject constructor(
 
         if (pastMemories.isEmpty()) return null
         return pastMemories.random()
-    }
-
-    override suspend fun getMemoriesCount(): Int {
-        return memoryDao.getMemoriesCount()
     }
 }
