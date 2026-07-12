@@ -21,9 +21,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.paridhi.onemoment.data.DummyMemoryRepository
 import com.paridhi.onemoment.ui.reflection.components.ReflectionMemoryCard
 import com.paridhi.onemoment.ui.reflection.components.ReflectionQuoteCard
+import com.paridhi.onemoment.ui.reflection.components.ReflectionTextCard
 
 @Composable
 fun ReflectionScreen() {
@@ -46,29 +48,48 @@ fun ReflectionScreen() {
                 .padding(top = 32.dp, bottom = 100.dp)
         ) {
             Text(
-                text = "Today remembered you.",
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
+                text = "REFLECTION",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.2.sp,
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Sunday • 13 July",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
+                text = "A memory came back\ntoday.",
+                style = MaterialTheme.typography.displayMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                lineHeight = 44.sp,
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = "From July 9, 2026 • Wednesday",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
 
             ReflectionMemoryCard(memory = randomMemory)
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ReflectionTextCard(
+                text = randomMemory.description
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             ReflectionQuoteCard(
-                quote = "The best thing about a picture is that it never changes, even when the people in it do.",
-                author = "Andy Warhol"
+                quote = "The little moments? The little moments are not little."
             )
         }
     }
