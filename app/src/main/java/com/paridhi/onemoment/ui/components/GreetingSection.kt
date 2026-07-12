@@ -1,6 +1,7 @@
 package com.paridhi.onemoment.ui.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -33,17 +33,27 @@ fun GreetingSection(
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp, vertical = 24.dp)
         ) {
+            Text(
+                text = currentDate.uppercase(),
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.2.sp
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
             ) {
                 Text(
                     text = userName,
-                    style = MaterialTheme.typography.displayMedium,
+                    style = MaterialTheme.typography.displayMedium.copy(fontSize = 32.sp),
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onBackground
                 )
-
-                Spacer(modifier = Modifier.width(12.dp))
 
                 Image(
                     painter = painterResource(id = R.drawable.ic_potted_plant),
@@ -51,15 +61,6 @@ fun GreetingSection(
                     modifier = Modifier.size(40.dp)
                 )
             }
-
-            Spacer(modifier = Modifier.height(4.dp))
-
-            Text(
-                text = currentDate,
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                fontWeight = FontWeight.Medium
-            )
         }
 
         HorizontalDivider(

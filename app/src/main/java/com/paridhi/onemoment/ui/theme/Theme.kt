@@ -27,7 +27,7 @@ private val LightColorScheme = lightColorScheme(
     onTertiary = CharcoalText,
     background = WarmIvory,
     onBackground = CharcoalText,
-    surface = WarmIvory,
+    surface = Color.White,
     onSurface = CharcoalText,
     surfaceVariant = SoftLavender,
     onSurfaceVariant = CharcoalText
@@ -42,7 +42,7 @@ private val DarkColorScheme = darkColorScheme(
     tertiary = MutedPeach,
     background = CharcoalText,
     onBackground = WarmIvory,
-    surface = CharcoalText,
+    surface = Color(0xFF2C3941),
     onSurface = WarmIvory
 )
 

@@ -52,8 +52,8 @@ fun HomeScreen() {
             .padding(bottom = 32.dp)
     ) {
         GreetingSection(
-            userName = "Paridhi",
-            currentDate = "Sunday • 13 July"
+            userName = "Good Evening",
+            currentDate = "Sunday, July 12"
         )
 
         // Prompt Section
