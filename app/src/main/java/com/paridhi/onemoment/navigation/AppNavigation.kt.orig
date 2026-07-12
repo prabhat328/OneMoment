@@ -18,7 +18,6 @@ import com.paridhi.onemoment.ui.components.BottomNavigationBar
 import com.paridhi.onemoment.ui.home.HomeScreen
 import com.paridhi.onemoment.ui.reflection.ReflectionScreen
 import com.paridhi.onemoment.ui.settings.SettingsScreen
-import com.paridhi.onemoment.ui.backup.BackupRestoreScreen
 import com.paridhi.onemoment.ui.timeline.TimelineScreen
 
 @Composable
@@ -47,12 +46,7 @@ fun AppNavigation() {
                 ReflectionScreen()
             }
             composable(Screen.Settings.route) {
-                SettingsScreen(
-                    onNavigateToBackupRestore = { navController.navigate(Screen.BackupRestore.route) }
-                )
-            }
-            composable(Screen.BackupRestore.route) {
-                BackupRestoreScreen(onNavigateBack = { navController.popBackStack() })
+                SettingsScreen()
             }
         }
     }

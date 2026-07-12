@@ -1,0 +1,8 @@
+--- Screen.kt
++++ Screen.kt
+@@ -5,4 +5,5 @@
+     object Timeline : Screen("timeline")
+     object Reflection : Screen("reflection")
+     object Settings : Screen("settings")
++    object BackupRestore : Screen("backup_restore")
+ }

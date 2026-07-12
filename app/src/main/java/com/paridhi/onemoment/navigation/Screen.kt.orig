@@ -12,5 +12,4 @@ sealed class Screen(val route: String, val title: String, val icon: ImageVector)
     data object Timeline : Screen("timeline", "Timeline", Icons.Default.Book)
     data object Reflection : Screen("reflection", "Reflection", Icons.Default.FavoriteBorder)
     data object Settings : Screen("settings", "Settings", Icons.Default.Settings)
-    data object BackupRestore : Screen("backup_restore", "Backup & Restore", Icons.Default.Settings)
 }
