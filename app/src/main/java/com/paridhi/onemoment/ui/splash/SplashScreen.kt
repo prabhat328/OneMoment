@@ -55,9 +55,10 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
     val taglineAlpha = remember { Animatable(0f) }
 
     // ---------- Colors ----------
-    val backgroundIvory = Color(0xFFFBF8F3)
-    val warmGlow = Color(0xFFF3E9D8)
-    val charcoalText = Color(0xFF36454F)
+    val isDarkMode = com.paridhi.onemoment.ui.theme.LocalIsDarkMode.current
+    val backgroundIvory = if (isDarkMode) MaterialTheme.colorScheme.background else Color(0xFFFBF8F3)
+    val warmGlow = if (isDarkMode) MaterialTheme.colorScheme.surfaceVariant else Color(0xFFF3E9D8)
+    val charcoalText = MaterialTheme.colorScheme.onBackground
 
     LaunchedEffect(Unit) {
         // Leaf gently falls into place like it's caught a small gust
@@ -176,7 +177,10 @@ fun SplashScreen(onSplashFinished: () -> Unit) {
                     .alpha(leafAlpha.value * 0.35f)
                     .background(
                         Brush.radialGradient(
-                            colors = listOf(Color(0x33362A1D), Color.Transparent)
+                            colors = listOf(
+                                if (isDarkMode) MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f) else Color(0x33362A1D),
+                                Color.Transparent
+                            )
                         )
                     )
             )

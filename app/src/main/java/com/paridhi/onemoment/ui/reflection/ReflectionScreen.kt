@@ -18,27 +18,63 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.paridhi.onemoment.data.DummyMemoryRepository
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.paridhi.onemoment.ui.reflection.components.ReflectionMemoryCard
 import com.paridhi.onemoment.ui.reflection.components.ReflectionQuoteCard
+import com.paridhi.onemoment.ui.reflection.components.ReflectionTextCard
 
 @Composable
-fun ReflectionScreen() {
+fun ReflectionScreen(
+    viewModel: ReflectionViewModel = hiltViewModel()
+) {
     val scrollState = rememberScrollState()
-    val randomMemory = remember { DummyMemoryRepository.getMemories().random() }
+    val randomMemory by viewModel.randomMemory.collectAsStateWithLifecycle()
+    val title by viewModel.title.collectAsStateWithLifecycle()
+    val quote by viewModel.quote.collectAsStateWithLifecycle()
     var visible by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        visible = true
+    LaunchedEffect(randomMemory) {
+        if (randomMemory != null) {
+            visible = true
+        }
     }
 
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(animationSpec = tween(1000))
-    ) {
+    if (randomMemory == null) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 24.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Nothing to reflect on yet",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = "Save a few memories and come back tomorrow.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(100.dp))
+        }
+    } else {
+        AnimatedVisibility(
+            visible = visible,
+            enter = fadeIn(animationSpec = tween(1000))
+        ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -46,30 +82,67 @@ fun ReflectionScreen() {
                 .padding(top = 32.dp, bottom = 100.dp)
         ) {
             Text(
-                text = "Today remembered you.",
-                style = MaterialTheme.typography.displaySmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
+                text = "REFLECTION",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+                fontWeight = FontWeight.SemiBold,
+                letterSpacing = 1.2.sp,
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "Sunday • 13 July",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary,
+                text = title,
+                style = MaterialTheme.typography.displayMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onBackground,
+                lineHeight = 44.sp,
                 modifier = Modifier.padding(horizontal = 24.dp)
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
-            ReflectionMemoryCard(memory = randomMemory)
+            val memory = randomMemory!!
 
-            Spacer(modifier = Modifier.height(32.dp))
+            // Format: "From July 9, 2026 • Wednesday" based on memory's createdDate
+            // Extract the day and date assuming format is "EEEE, MMMM d"
+            val parts = memory.createdDate.split(",")
+            val dayName = parts.getOrNull(0)?.trim() ?: ""
+            val monthDate = parts.getOrNull(1)?.trim() ?: memory.createdDate
+
+            val formattedDate = if (dayName.isNotEmpty()) {
+                "From $monthDate • $dayName"
+            } else {
+                "From ${memory.createdDate}"
+            }
+
+            Text(
+                text = formattedDate,
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary.copy(alpha = 0.8f),
+                modifier = Modifier.padding(horizontal = 24.dp)
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            if (memory.photoUri != null) {
+                ReflectionMemoryCard(memory = memory)
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ReflectionTextCard(
+                text = memory.memoryText
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
 
             ReflectionQuoteCard(
-                quote = "The best thing about a picture is that it never changes, even when the people in it do.",
-                author = "Andy Warhol"
+                quote = quote
             )
+        }
         }
     }
 }
