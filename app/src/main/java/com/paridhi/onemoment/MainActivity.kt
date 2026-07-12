@@ -16,7 +16,9 @@ import com.paridhi.onemoment.ui.OneMomentApp
 import com.paridhi.onemoment.ui.theme.LocalIsDarkMode
 import com.paridhi.onemoment.ui.theme.LocalThemeToggle
 import com.paridhi.onemoment.ui.theme.OneMomentTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
